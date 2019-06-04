@@ -50,7 +50,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         loadData();
 
-//        list = new ArrayList<PostModel>();
         adapter = new RecyclerViewAdapter(list, mediaList, getContext());
         recyclerView.setAdapter(adapter);
 
