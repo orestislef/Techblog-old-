@@ -53,8 +53,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         adapter = new RecyclerViewAdapter(list, mediaList, getContext());
         recyclerView.setAdapter(adapter);
 
-//        getRetrofitData();
-
         swipeContainer = view.findViewById(R.id.swipe_container);
         swipeContainer.setOnRefreshListener(this);
 
@@ -213,6 +211,9 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
         if (mediaList == null) {
             mediaList = new ArrayList<PostMedia>();
+        }
+        if (json==null || json2 == null){
+            getRetrofitData();
         }
     }
 
