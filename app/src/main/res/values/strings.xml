@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Techblog</string>
+
+    <string name="base_url">https://techblog.gr/</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Open navigation close</string>
+
+    <string-array name="categories">
+        <!--Shmartphones-->
+        <item>8</item>
+        <!--Gear-->
+        <item>24</item>
+        <!--Reviews-->
+        <item>58</item>
+        <!--Workshop-->
+        <item>1033</item>
+        <!--Internet-->
+        <item>49</item>
+        <!--Cars-->
+        <item>9131</item>
+        <!--Homecinema-->
+        <item>57</item>
+        <!--Software-->
+        <item>584</item>
+        <!--Computers-->
+        <item>29</item>
+        <!--business-->
+        <item>24</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

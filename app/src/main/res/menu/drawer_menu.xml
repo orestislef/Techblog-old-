@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Home" />
+
+
+    <item
+        android:id="@+id/nav_smartphones"
+        android:icon="@drawable/ic_phone_iphone_black_24dp"
+        android:title="Smartphones" />
+
+    <item
+        android:id="@+id/nav_gear"
+        android:icon="@drawable/ic_gear_black_24dp"
+        android:title="Gear" />
+
+    <item
+        android:id="@+id/nav_reviews"
+        android:icon="@drawable/ic_reviews_black_24dp"
+        android:title="Reviews" />
+
+    <item
+        android:id="@+id/nav_workshop"
+        android:icon="@drawable/ic_phone_iphone_black_24dp"
+        android:title="Workshop" />
+
+    <item
+        android:id="@+id/nav_internet"
+        android:icon="@drawable/ic_internet"
+        android:title="Internet" />
+
+    <item
+        android:id="@+id/nav_cars"
+        android:icon="@drawable/ic_car"
+        android:title="Cars" />
+
+    <item
+        android:id="@+id/nav_homecinema"
+        android:icon="@drawable/ic_homecinema"
+        android:title="Home Cinema" />
+
+    <item
+        android:id="@+id/nav_software"
+        android:icon="@drawable/ic_software"
+        android:title="Software" />
+
+    <item
+        android:id="@+id/nav_computers"
+        android:icon="@drawable/ic_computer_black_24dp"
+        android:title="Υπολογιστές" />
+
+    <item
+        android:id="@+id/nav_business"
+        android:icon="@drawable/ic_business"
+        android:title="Business" />
+
+    </group>
+
+</menu>
