@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         adapter = new RecyclerViewAdapter(list, mediaList, getContext());
         recyclerView.setAdapter(adapter);
 
-        getRetrofitData();
+//        getRetrofitData();
 
         swipeContainer = view.findViewById(R.id.swipe_container);
         swipeContainer.setOnRefreshListener(this);

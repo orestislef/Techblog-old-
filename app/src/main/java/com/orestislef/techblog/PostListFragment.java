@@ -57,7 +57,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         adapter = new RecyclerViewAdapter(list, mediaList, getContext());
         recyclerView.setAdapter(adapter);
 
-        getRetrofitData();
+//        getRetrofitData();
 
         swipeContainer = view.findViewById(R.id.swipe_container);
         swipeContainer.setOnRefreshListener(this);
@@ -137,12 +137,12 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                               Log.e(TAG, "onResponse: " + response.body());
                               Log.d(TAG, "onResponse: mediaUrl: " + mediaUrl);
 
-                              if (response.body().size() != 0){
+                              if (response.body().size() != 0) {
                                   String mediaUrl = response.body().get(0).getLink();
                                   mediaList.add(new PostMedia(mediaUrl));
                                   saveDataImageList();
                                   Log.d(TAG, "onResponseImage: " + "\n******************************" + "\n\t" + mediaUrl + "\n******************************");
-                              }else {
+                              } else {
                                   String mediaUrl = "https://i2.wp.com/frankmedilink.in/wp-content/uploads/2017/02/no-preview-big1.jpg";
                                   mediaList.add(new PostMedia(mediaUrl));
                                   saveDataImageList();
@@ -183,38 +183,38 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void saveDataList() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(category+"SHARED_PREFERENCES", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(category + "SHARED_PREFERENCES", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson = new Gson();
         String json = gson.toJson(list);
-        editor.putString(category+"TASK_LIST", json);
+        editor.putString(category + "TASK_LIST", json);
 
         editor.apply();
     }
 
     private void saveDataImageList() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(category+"SHARED_PREFERENCES", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(category + "SHARED_PREFERENCES", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         Gson gson2 = new Gson();
         String json2 = gson2.toJson(mediaList);
-        editor.putString(category+"TASK_IMAGE_LIST", json2);
+        editor.putString(category + "TASK_IMAGE_LIST", json2);
 
         editor.apply();
     }
 
 
     private void loadData() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(category+"SHARED_PREFERENCES", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(category + "SHARED_PREFERENCES", MODE_PRIVATE);
         Gson gson = new Gson();
-        String json = sharedPreferences.getString(category+"TASK_LIST", null);
+        String json = sharedPreferences.getString(category + "TASK_LIST", null);
         Type type = new TypeToken<ArrayList<PostModel>>() {
         }.getType();
         list = gson.fromJson(json, type);
 
         Gson gson2 = new Gson();
-        String json2 = sharedPreferences.getString(category+"TASK_IMAGE_LIST", null);
+        String json2 = sharedPreferences.getString(category + "TASK_IMAGE_LIST", null);
         Type type2 = new TypeToken<ArrayList<PostMedia>>() {
         }.getType();
         mediaList = gson2.fromJson(json2, type2);
@@ -225,7 +225,8 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         if (mediaList == null) {
             mediaList = new ArrayList<PostMedia>();
         }
+        if (json==null || json2 == null){
+            getRetrofitData();
+        }
     }
-
-
 }

@@ -72,27 +72,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int i) {
-    }
 
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position, @NonNull List payloads) {
+        final PostModel object = dataset.get(i);
 
-        final PostModel object = dataset.get(position);
-
-        ((ImageTypeViewHolder) holder).title.setText(object.title);
-        ((ImageTypeViewHolder) holder).excerpt.setText(object.excerpt);
+        ((ImageTypeViewHolder) viewHolder).title.setText(object.title);
+        ((ImageTypeViewHolder) viewHolder).excerpt.setText(object.excerpt);
 
 
-        final PostMedia object2 = postMedia.get(position);
+        final PostMedia object2 = postMedia.get(i);
         String postMediaUrl = object2.PostMediaUrl;
         Glide.with(mContext)
                 .load(postMediaUrl)
-                .into(((ImageTypeViewHolder) holder).imageView);
+                .into(((ImageTypeViewHolder) viewHolder).imageView);
 
-        ((ImageTypeViewHolder)holder).imageView.setOnClickListener(new View.OnClickListener() {
+        ((ImageTypeViewHolder)viewHolder).imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "You clicked on "+(position+1), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "You clicked on "+(i+1), Toast.LENGTH_SHORT).show();
             }
         });
     }
