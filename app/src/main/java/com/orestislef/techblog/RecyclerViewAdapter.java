@@ -92,6 +92,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
                startDetailPostFragment(object.title,object.content);
             }
         });
+        ((ImageTypeViewHolder)viewHolder).title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startDetailPostFragment(object.title,object.content);
+            }
+        });
+        ((ImageTypeViewHolder)viewHolder).excerpt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startDetailPostFragment(object.title,object.content);
+            }
+        });
     }
 
     public void startDetailPostFragment(String title, String content){

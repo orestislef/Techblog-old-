@@ -135,6 +135,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                   saveDataImageList();
                                   Log.d(TAG, "onResponseImage: " + "\n******************************" + "\n\t" + mediaUrl + "\n******************************");
                               }else {
+
                                   String mediaUrl = "https://i2.wp.com/frankmedilink.in/wp-content/uploads/2017/02/no-preview-big1.jpg";
                                   mediaList.add(new PostMedia(mediaUrl));
                                   saveDataImageList();
