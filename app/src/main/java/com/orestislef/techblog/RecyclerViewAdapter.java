@@ -4,20 +4,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.manager.SupportRequestManagerFragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter {
 
@@ -82,41 +79,43 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
 
         final PostMedia object2 = postMedia.get(i);
         String postMediaUrl = object2.PostMediaUrl;
-        if (postMediaUrl==null){
+        if (postMediaUrl == null) {
             ((ImageTypeViewHolder) viewHolder).imageView.setVisibility(View.GONE);
-        }else {
-        Glide.with(mContext)
-                .load(postMediaUrl)
-                .into(((ImageTypeViewHolder) viewHolder).imageView);
+        } else {
+            ((ImageTypeViewHolder) viewHolder).imageView.setVisibility(View.VISIBLE);
+            Glide.with(mContext)
+                    .load(postMediaUrl)
+                    .into(((ImageTypeViewHolder) viewHolder).imageView);
         }
-        ((ImageTypeViewHolder)viewHolder).imageView.setOnClickListener(new View.OnClickListener() {
+
+        ((ImageTypeViewHolder) viewHolder).imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               startDetailPostFragment(object.title,object.content);
+                startDetailPostFragment(object.title, object.content);
             }
         });
-        ((ImageTypeViewHolder)viewHolder).title.setOnClickListener(new View.OnClickListener() {
+        ((ImageTypeViewHolder) viewHolder).title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startDetailPostFragment(object.title,object.content);
+                startDetailPostFragment(object.title, object.content);
             }
         });
-        ((ImageTypeViewHolder)viewHolder).excerpt.setOnClickListener(new View.OnClickListener() {
+        ((ImageTypeViewHolder) viewHolder).excerpt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startDetailPostFragment(object.title,object.content);
+                startDetailPostFragment(object.title, object.content);
             }
         });
     }
 
-    public void startDetailPostFragment(String title, String content){
-        FragmentManager fragmentManager = ((MainActivity)mContext).getSupportFragmentManager();
+    public void startDetailPostFragment(String title, String content) {
+        FragmentManager fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
         PostDetailFragment postDetailFragment = new PostDetailFragment();
-        Bundle postDetailFragmentBundle= new Bundle();
-        postDetailFragmentBundle.putString("POST_TITLE",title);
-        postDetailFragmentBundle.putString("POST_CONTENT",content);
+        Bundle postDetailFragmentBundle = new Bundle();
+        postDetailFragmentBundle.putString("POST_TITLE", title);
+        postDetailFragmentBundle.putString("POST_CONTENT", content);
         postDetailFragment.setArguments(postDetailFragmentBundle);
-        fragmentManager.beginTransaction().replace(R.id.fragment_container,postDetailFragment).addToBackStack(null).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, postDetailFragment).addToBackStack(null).commit();
     }
 
     @Override

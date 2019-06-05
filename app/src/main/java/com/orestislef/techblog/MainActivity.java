@@ -13,6 +13,18 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+//*****************************************************************************
+//  1.      na valw na pernei perisetera otan ftanei katw to recyclerViewer
+//          video: https://www.youtube.com/watch?v=PamhELVWYY0
+//          Android Studio Tutorial - Recycler View Dynamic Load Data edmt dev
+//  2.      na valw darkMode se olo to UI
+//          video: https://www.youtube.com/watch?v=-qsHE3TpJqw
+//          Implement Night Mode in your App | Custom Styles in Android Studio
+//  3.      na valw to etimo pou exw to per_page(query) na epilegei o xristis
+//          posa post thelei na ton emvanizonte
+//*****************************************************************************
+
+
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private ActionBarDrawerToggle toggle;
