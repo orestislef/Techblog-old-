@@ -92,13 +92,13 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
                     String mContent = response.body().get(i).getContent().getRendered();
 
-                    mContent = mContent.replace("<p>", "");
-                    mContent = mContent.replace("</p>", "");
-                    mContent = mContent.replace("[&hellip;]", "");
 
                     Log.d(TAG, "onResponse: " +
                             "\n========================================================================================================================"
-                            + "\nid: \t\t" + mId + "\nTitle: \t\t" + mTitle + "\nSubtitle: \t" + mSubtitle + "\nContent: \t\t" + mContent
+                            + "\nid: \t\t" + mId
+                            + "\nTitle: \t\t" + mTitle
+                            + "\nSubtitle: \t" + mSubtitle
+                            + "\nContent: \t\t" + mContent
                             + "\n========================================================================================================================");
 
                     list.add(new PostModel(PostModel.IMAGE_TYPE, mId, mTitle, mSubtitle, mContent));
@@ -223,7 +223,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         if (mediaList == null) {
             mediaList = new ArrayList<PostMedia>();
         }
-        if (json==null || json2 == null){
+        if (json == null || json2 == null) {
             getRetrofitData();
         }
     }

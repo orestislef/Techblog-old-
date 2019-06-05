@@ -88,10 +88,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
                     String mContent = response.body().get(i).getContent().getRendered();
 
-                    mContent = mContent.replace("<p>", "");
-                    mContent = mContent.replace("</p>", "");
-                    mContent = mContent.replace("[&hellip;]", "");
-
                     Log.d(TAG, "onResponse: "
                             + "\n========================================================================================================================"
                             + "\nid: \t\t" + mId
