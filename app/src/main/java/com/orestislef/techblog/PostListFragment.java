@@ -141,7 +141,8 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                                   saveDataImageList();
                                   Log.d(TAG, "onResponseImage: " + "\n******************************" + "\n\t" + mediaUrl + "\n******************************");
                               } else {
-                                  String mediaUrl = "https://i2.wp.com/frankmedilink.in/wp-content/uploads/2017/02/no-preview-big1.jpg";
+                                  String mediaUrl = null;
+//                                  String mediaUrl = "https://i2.wp.com/frankmedilink.in/wp-content/uploads/2017/02/no-preview-big1.jpg";
                                   mediaList.add(new PostMedia(mediaUrl));
                                   saveDataImageList();
                                   Log.d(TAG, "onResponseImage: " + "\n******************************" + "\n\t" + mediaUrl + "\n******************************");

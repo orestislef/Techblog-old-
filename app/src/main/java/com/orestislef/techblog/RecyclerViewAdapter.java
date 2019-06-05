@@ -82,10 +82,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
 
         final PostMedia object2 = postMedia.get(i);
         String postMediaUrl = object2.PostMediaUrl;
+        if (postMediaUrl==null){
+            ((ImageTypeViewHolder) viewHolder).imageView.setVisibility(View.GONE);
+        }else {
         Glide.with(mContext)
                 .load(postMediaUrl)
                 .into(((ImageTypeViewHolder) viewHolder).imageView);
-
+        }
         ((ImageTypeViewHolder)viewHolder).imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
