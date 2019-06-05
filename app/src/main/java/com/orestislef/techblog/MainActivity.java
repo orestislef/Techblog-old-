@@ -22,6 +22,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //          Implement Night Mode in your App | Custom Styles in Android Studio
 //  3.      na valw to etimo pou exw to per_page(query) na epilegei o xristis
 //          posa post thelei na ton emvanizonte
+//          mporw na kanw copy/paste to retrofit alla na parw to getPostById();
+//          kai to fori na 3ekinaei apo to 10+
+//          to media tha mini to idio
+//  4.      na valw setting menu pou na vgazei posa post na fenonte kai sta
+//          settings na exei kai to dark mode
 //*****************************************************************************
 
 

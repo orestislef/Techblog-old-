@@ -172,6 +172,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
                 list.clear();
                 adapter.clearModel();
+
                 mediaList.clear();
                 adapter.clearPostMediaList();
 
