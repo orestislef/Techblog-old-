@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        loadData();
+        LoadData();
 
         adapter = new RecyclerViewAdapter(list, mediaList, getContext());
         recyclerView.setAdapter(adapter);
@@ -60,58 +60,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         return view;
     }
-
-//    private void getRetrofitData() {
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(getResources().getString(R.string.base_url))
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        RetrofitArrayApi service = retrofit.create(RetrofitArrayApi.class);
-////        Call<List<WPPost>> call = service.getPostInfo();
-//        Call<List<WPPost>> call = service.getPostPerPage(10);
-//
-//        call.enqueue(new Callback<List<WPPost>>() {
-//            @Override
-//            public void onResponse(Call<List<WPPost>> call, Response<List<WPPost>> response) {
-//                Log.e(TAG, "onResponse: " + response.body());
-//
-//                adapter.clearModel();
-//
-//                for (int i = 0; i < response.body().size(); i++) {
-//                    int mId = response.body().get(i).getId();
-//                    Log.d(TAG, "onResponseID: " + mId);
-//                    String mediaUrl = response.body().get(i).getLinks().getWpAttachment().get(0).getHref();
-//                    String mTitle = response.body().get(i).getTitle().getRendered();
-//                    String mSubtitle = response.body().get(i).getExcerpt().getRendered();
-//
-//                    mSubtitle = mSubtitle.replace("<p>", "");
-//                    mSubtitle = mSubtitle.replace("</p>", "");
-//                    mSubtitle = mSubtitle.replace("[&hellip;]", "");
-//
-//                    String mContent = response.body().get(i).getContent().getRendered();
-//
-//                    Log.d(TAG, "onResponse: "
-//                            + "\n========================================================================================================================"
-//                            + "\nid: \t\t" + mId
-//                            + "\nTitle: \t\t" + mTitle
-//                            + "\nSubtitle: \t" + mSubtitle
-//                            + "\nContent: \t\t" + mContent
-//                            + "\n========================================================================================================================");
-//
-//                    list.add(new PostModel(PostModel.IMAGE_TYPE, mId, mTitle, mSubtitle, mContent));
-//                    getRetrofitImage(mediaUrl);
-//                    saveDataList();
-//                }
-//                adapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<WPPost>> call, Throwable t) {
-//
-//            }
-//        });
-//    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,14 +72,15 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public void run() {
                 // Stop animation (This will be after 1 seconds)
-                startAsyncDataTask();
+                StartAsyncDataTask();
 //                getRetrofitData();
-                swipeContainer.setRefreshing(false);
+
+//                swipeContainer.setRefreshing(false);
             }
-        }, 1000); // Delay in millis
+        }, 100); // Delay in millis
     }
 
-    private void loadData() {
+    private void LoadData() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("SHARED_PREFERENCES", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("HOME_TASK_LIST", null);
@@ -152,21 +101,20 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             mediaList = new ArrayList<PostMedia>();
         }
         if (json == null || json2 == null) {
-            startAsyncDataTask();
-//            getRetrofitData();
+            StartAsyncDataTask();
         }
     }
 
-    public void startAsyncDataTask() {
+    public void StartAsyncDataTask() {
 
-        getRetrofitDataAsyncTask task = new getRetrofitDataAsyncTask(this);
-        task.execute(25);
+        GetRetrofitDataAsyncTask task = new GetRetrofitDataAsyncTask(this);
+        task.execute(100);
     }
 
-    private class getRetrofitDataAsyncTask extends AsyncTask<Integer, Void, ArrayList> {
+    private class GetRetrofitDataAsyncTask extends AsyncTask<Integer, Void, ArrayList> {
         private WeakReference<HomeFragment> fragmentWeakReference;
 
-        getRetrofitDataAsyncTask(HomeFragment homeFragment) {
+        GetRetrofitDataAsyncTask(HomeFragment homeFragment) {
             fragmentWeakReference = new WeakReference<HomeFragment>(homeFragment);
         }
 
@@ -210,8 +158,8 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 + "\n========================================================================================================================");
 
                         list.add(new PostModel(PostModel.IMAGE_TYPE, mId, mTitle, mSubtitle, mContent));
-                        getRetrofitImage(mediaUrl);
-                        saveDataList();
+                        GetRetrofitImage(mediaUrl);
+                        SaveDataList();
                     }
                     adapter.notifyDataSetChanged();
                 }
@@ -240,11 +188,13 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             if (homeFragment == null || homeFragment.isDetached()) {
                 return;
             }
+            swipeContainer.setRefreshing(false);
+
             super.onPostExecute(arrayList);
         }
     }
 
-    private void getRetrofitImage(String mediaUrl) {
+    private void GetRetrofitImage(String mediaUrl) {
         Retrofit retrofit2 = new Retrofit.Builder()
                 .baseUrl(getResources().getString(R.string.base_url))
                 .addConverterFactory(GsonConverterFactory.create())
@@ -265,13 +215,13 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                               if (response.body().size() != 0) {
                                   String mediaUrl = response.body().get(0).getLink();
                                   mediaList.add(new PostMedia(mediaUrl));
-                                  saveDataImageList();
+                                  SaveDataImageList();
                                   Log.d(TAG, "onResponseImage: " + "\n******************************" + "\n\t" + mediaUrl + "\n******************************");
                               } else {
 
                                   String mediaUrl = null;
                                   mediaList.add(new PostMedia(mediaUrl));
-                                  saveDataImageList();
+                                  SaveDataImageList();
                                   Log.d(TAG, "onResponseImage: " + "\n******************************" + "\n\t" + mediaUrl + "\n******************************");
                               }
                               adapter.notifyDataSetChanged();
@@ -284,7 +234,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         );
     }
 
-    private void saveDataList() {
+    private void SaveDataList() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("SHARED_PREFERENCES", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -295,7 +245,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         editor.apply();
     }
 
-    private void saveDataImageList() {
+    private void SaveDataImageList() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("SHARED_PREFERENCES", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
