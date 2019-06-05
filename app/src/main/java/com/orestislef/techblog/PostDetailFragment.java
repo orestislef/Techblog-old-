@@ -3,6 +3,7 @@ package com.orestislef.techblog;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class PostDetailFragment extends Fragment {
         contentTV = view.findViewById(R.id.post_det_content);
 
         titleTV.setText(title);
-        contentTV.setText(content);
+        contentTV.setText(Html.fromHtml(content));
         return view;
     }
 
