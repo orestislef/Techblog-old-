@@ -57,8 +57,6 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         adapter = new RecyclerViewAdapter(list, mediaList, getContext());
         recyclerView.setAdapter(adapter);
 
-//        getRetrofitData();
-
         swipeContainer = view.findViewById(R.id.swipe_container);
         swipeContainer.setOnRefreshListener(this);
 

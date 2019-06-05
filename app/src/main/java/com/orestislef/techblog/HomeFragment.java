@@ -92,9 +92,12 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     mContent = mContent.replace("</p>", "");
                     mContent = mContent.replace("[&hellip;]", "");
 
-                    Log.d(TAG, "onResponse: " +
-                            "\n========================================================================================================================"
-                            + "\nid: \t\t" + mId + "\nTitle: \t\t" + mTitle + "\nSubtitle: \t" + mSubtitle + "\nContent: \t\t" + mContent
+                    Log.d(TAG, "onResponse: "
+                            + "\n========================================================================================================================"
+                            + "\nid: \t\t" + mId
+                            + "\nTitle: \t\t" + mTitle
+                            + "\nSubtitle: \t" + mSubtitle
+                            + "\nContent: \t\t" + mContent
                             + "\n========================================================================================================================");
 
                     list.add(new PostModel(PostModel.IMAGE_TYPE, mId, mTitle, mSubtitle, mContent));

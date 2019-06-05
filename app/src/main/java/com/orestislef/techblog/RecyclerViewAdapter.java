@@ -1,6 +1,7 @@
 package com.orestislef.techblog;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -88,9 +89,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
         ((ImageTypeViewHolder)viewHolder).imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "You clicked on "+(i+1), Toast.LENGTH_SHORT).show();
+               startDetailPostFragment(object.title,object.content);
             }
         });
+    }
+
+    public void startDetailPostFragment(String title, String content){
+        FragmentManager fragmentManager = ((MainActivity)mContext).getSupportFragmentManager();
+        PostDetailFragment postDetailFragment = new PostDetailFragment();
+        Bundle postDetailFragmentBundle= new Bundle();
+        postDetailFragmentBundle.putString("POST_TITLE",title);
+        postDetailFragmentBundle.putString("POST_CONTENT",content);
+        postDetailFragment.setArguments(postDetailFragmentBundle);
+        fragmentManager.beginTransaction().replace(R.id.fragment_container,postDetailFragment).addToBackStack(null).commit();
     }
 
     @Override
