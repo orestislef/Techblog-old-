@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -85,6 +84,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             ((ImageTypeViewHolder) viewHolder).imageView.setVisibility(View.VISIBLE);
             Glide.with(mContext)
                     .load(postMediaUrl)
+                    .thumbnail()
                     .into(((ImageTypeViewHolder) viewHolder).imageView);
         }
 

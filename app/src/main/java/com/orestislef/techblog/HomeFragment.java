@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
 //                swipeContainer.setRefreshing(false);
             }
-        }, 100); // Delay in millis
+        }, 1000); // Delay in millis
     }
 
     private void LoadData() {
@@ -108,10 +108,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void StartAsyncDataTask() {
 
         GetRetrofitDataAsyncTask task = new GetRetrofitDataAsyncTask(this);
-        task.execute(100);
+        task.execute(10);
     }
 
-    private class GetRetrofitDataAsyncTask extends AsyncTask<Integer, Void, ArrayList> {
+    private final class GetRetrofitDataAsyncTask extends AsyncTask<Integer, Void, ArrayList> {
         private WeakReference<HomeFragment> fragmentWeakReference;
 
         GetRetrofitDataAsyncTask(HomeFragment homeFragment) {
@@ -188,7 +188,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             if (homeFragment == null || homeFragment.isDetached()) {
                 return;
             }
-            swipeContainer.setRefreshing(false);
+            homeFragment.swipeContainer.setRefreshing(false);
 
             super.onPostExecute(arrayList);
         }

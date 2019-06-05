@@ -63,6 +63,55 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         return view;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Stop animation (This will be after 1 seconds)
+
+                list.clear();
+                adapter.clearModel();
+
+                mediaList.clear();
+                adapter.clearPostMediaList();
+
+                getRetrofitData();
+                swipeContainer.setRefreshing(false);
+            }
+        }, 1000); // Delay in millis
+    }
+
+    private void loadData() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(category + "SHARED_PREFERENCES", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(category + "TASK_LIST", null);
+        Type type = new TypeToken<ArrayList<PostModel>>() {
+        }.getType();
+        list = gson.fromJson(json, type);
+
+        Gson gson2 = new Gson();
+        String json2 = sharedPreferences.getString(category + "TASK_IMAGE_LIST", null);
+        Type type2 = new TypeToken<ArrayList<PostMedia>>() {
+        }.getType();
+        mediaList = gson2.fromJson(json2, type2);
+
+        if (list == null) {
+            list = new ArrayList<PostModel>();
+        }
+        if (mediaList == null) {
+            mediaList = new ArrayList<PostMedia>();
+        }
+        if (json == null || json2 == null) {
+            getRetrofitData();
+        }
+    }
+
     private void getRetrofitData() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(getResources().getString(R.string.base_url))
@@ -157,31 +206,6 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         );
     }
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Stop animation (This will be after 1 seconds)
-
-                list.clear();
-                adapter.clearModel();
-
-                mediaList.clear();
-                adapter.clearPostMediaList();
-
-                getRetrofitData();
-                swipeContainer.setRefreshing(false);
-            }
-        }, 1000); // Delay in millis
-    }
-
     private void saveDataList() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(category + "SHARED_PREFERENCES", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -202,31 +226,5 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         editor.putString(category + "TASK_IMAGE_LIST", json2);
 
         editor.apply();
-    }
-
-
-    private void loadData() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(category + "SHARED_PREFERENCES", MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString(category + "TASK_LIST", null);
-        Type type = new TypeToken<ArrayList<PostModel>>() {
-        }.getType();
-        list = gson.fromJson(json, type);
-
-        Gson gson2 = new Gson();
-        String json2 = sharedPreferences.getString(category + "TASK_IMAGE_LIST", null);
-        Type type2 = new TypeToken<ArrayList<PostMedia>>() {
-        }.getType();
-        mediaList = gson2.fromJson(json2, type2);
-
-        if (list == null) {
-            list = new ArrayList<PostModel>();
-        }
-        if (mediaList == null) {
-            mediaList = new ArrayList<PostMedia>();
-        }
-        if (json == null || json2 == null) {
-            getRetrofitData();
-        }
     }
 }
