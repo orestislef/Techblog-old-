@@ -1,18 +1,24 @@
 package com.orestislef.techblog;
 
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter;
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
 
 public class PostDetailFragment extends Fragment {
 
-    private TextView titleTV, contentTV;
+    private TextView titleTV;
+    private HtmlTextView contentTV;
     private String title, content;
 
 
@@ -32,7 +38,8 @@ public class PostDetailFragment extends Fragment {
         contentTV = view.findViewById(R.id.post_det_content);
 
         titleTV.setText(title);
-        contentTV.setText(Html.fromHtml(content));
+
+        contentTV.setHtml(content,new HtmlHttpImageGetter(contentTV));
         return view;
     }
 
