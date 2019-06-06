@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter {
 
@@ -22,14 +23,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
     private Context mContext;
 
     public void clearModel() {
-        final int sizeDa = dataset.size();
+        int sizeDa = dataset.size();
         dataset.clear();
-
         notifyItemRangeRemoved(0, sizeDa);
     }
 
     public void clearPostMediaList() {
-        final int sizeIm = postMedia.size();
+        int sizeIm = postMedia.size();
         postMedia.clear();
         notifyItemRangeRemoved(0, sizeIm);
     }
@@ -37,7 +37,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
     public void addAll(ArrayList<PostModel> list, ArrayList<PostMedia> mediaList) {
         dataset.addAll(list);
         mediaList.addAll(mediaList);
-        notifyDataSetChanged();
     }
 
     public static class ImageTypeViewHolder extends RecyclerView.ViewHolder {
@@ -68,43 +67,50 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int i) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
+        super.onBindViewHolder(holder, position, payloads);
 
-        final PostModel object = dataset.get(i);
+        final PostModel object = dataset.get(position);
+        final PostMedia object2 = postMedia.get(position);
 
-        ((ImageTypeViewHolder) viewHolder).title.setText(object.title);
-        ((ImageTypeViewHolder) viewHolder).excerpt.setText(object.excerpt);
-
-
-        final PostMedia object2 = postMedia.get(i);
         String postMediaUrl = object2.PostMediaUrl;
+
         if (postMediaUrl == null) {
-            ((ImageTypeViewHolder) viewHolder).imageView.setVisibility(View.GONE);
+            ((ImageTypeViewHolder) holder).imageView.setVisibility(View.GONE);
         } else {
-            ((ImageTypeViewHolder) viewHolder).imageView.setVisibility(View.VISIBLE);
+            ((ImageTypeViewHolder) holder).imageView.setVisibility(View.VISIBLE);
             Glide.with(mContext)
                     .load(postMediaUrl)
-                    .into(((ImageTypeViewHolder) viewHolder).imageView);
+                    .into(((ImageTypeViewHolder) holder).imageView);
         }
 
-        ((ImageTypeViewHolder) viewHolder).imageView.setOnClickListener(new View.OnClickListener() {
+
+        ((ImageTypeViewHolder) holder).title.setText(object.title);
+        ((ImageTypeViewHolder) holder).excerpt.setText(object.excerpt);
+
+        ((ImageTypeViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startDetailPostFragment(object.title, object.content);
             }
         });
-        ((ImageTypeViewHolder) viewHolder).title.setOnClickListener(new View.OnClickListener() {
+        ((ImageTypeViewHolder) holder).title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startDetailPostFragment(object.title, object.content);
             }
         });
-        ((ImageTypeViewHolder) viewHolder).excerpt.setOnClickListener(new View.OnClickListener() {
+        ((ImageTypeViewHolder) holder).excerpt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startDetailPostFragment(object.title, object.content);
             }
         });
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int i) {
+
     }
 
     public void startDetailPostFragment(String title, String content) {

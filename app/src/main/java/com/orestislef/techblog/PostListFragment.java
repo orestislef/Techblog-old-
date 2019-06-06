@@ -168,7 +168,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                                 + "\nContent: \t\t" + mContent
                                 + "\n========================================================================================================================");
 
-                        postListFragment.list.add(new PostModel(PostModel.IMAGE_TYPE, mId, mTitle, mSubtitle, mContent));
+                        postListFragment.list.add(new PostModel(PostModel.IMAGE_TYPE, mediaUrl, mId, mTitle, mSubtitle, mContent));
                         postListFragment.getRetrofitImage(mediaUrl);
                         postListFragment.saveDataList();
                     }
