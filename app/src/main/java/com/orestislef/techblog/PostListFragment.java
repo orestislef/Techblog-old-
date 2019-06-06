@@ -76,7 +76,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             @Override
             public void run() {
                 // Stop animation (This will be after 1 seconds)
-                StartAsyncDataTask(category);
+                startAsyncDataTask(category);
 //                list.clear();
 //                adapter.clearModel();
 
@@ -110,19 +110,19 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             mediaList = new ArrayList<PostMedia>();
         }
         if (json == null || json2 == null) {
-            StartAsyncDataTask(category);
+            startAsyncDataTask(category);
         }
     }
 
-    private void StartAsyncDataTask(Integer category) {
-        GetRetrofitDataAsyncTask task = new GetRetrofitDataAsyncTask(this);
+    private void startAsyncDataTask(Integer category) {
+        getRetrofitDataAsyncTask task = new getRetrofitDataAsyncTask(this);
         task.execute(category);
     }
 
-    private static class GetRetrofitDataAsyncTask extends AsyncTask<Integer, Void, ArrayList> {
+    private static class getRetrofitDataAsyncTask extends AsyncTask<Integer, Void, ArrayList> {
         private WeakReference<PostListFragment> fragmentWeakReference;
 
-        GetRetrofitDataAsyncTask(PostListFragment postListFragment) {
+        getRetrofitDataAsyncTask(PostListFragment postListFragment) {
             fragmentWeakReference = new WeakReference<PostListFragment>(postListFragment);
         }
 
@@ -169,8 +169,8 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                                 + "\n========================================================================================================================");
 
                         postListFragment.list.add(new PostModel(PostModel.IMAGE_TYPE, mId, mTitle, mSubtitle, mContent));
-                        postListFragment.GetRetrofitImage(mediaUrl);
-                        postListFragment.SaveDataList();
+                        postListFragment.getRetrofitImage(mediaUrl);
+                        postListFragment.saveDataList();
                     }
                     postListFragment.adapter.notifyDataSetChanged();
                 }
@@ -205,7 +205,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
     }
 
-    private void GetRetrofitImage(final String mediaUrl) {
+    private void getRetrofitImage(final String mediaUrl) {
 
         Retrofit retrofit2 = new Retrofit.Builder()
                 .baseUrl(getResources().getString(R.string.base_url))
@@ -246,7 +246,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         );
     }
 
-    private void SaveDataList() {
+    public void saveDataList() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(category + "SHARED_PREFERENCES", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -257,7 +257,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         editor.apply();
     }
 
-    private void saveDataImageList() {
+    public void saveDataImageList() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(category + "SHARED_PREFERENCES", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 

@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        LoadData();
+        loadData();
 
         adapter = new RecyclerViewAdapter(list, mediaList, getContext());
         recyclerView.setAdapter(adapter);
@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public void run() {
                 // Stop animation (This will be after 1 seconds)
-                StartAsyncDataTask();
+                startAsyncDataTask();
 //                getRetrofitData();
 
 //                swipeContainer.setRefreshing(false);
@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }, 1000); // Delay in millis
     }
 
-    private void LoadData() {
+    private void loadData() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("SHARED_PREFERENCES", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("HOME_TASK_LIST", null);
@@ -101,20 +101,20 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             mediaList = new ArrayList<PostMedia>();
         }
         if (json == null || json2 == null) {
-            StartAsyncDataTask();
+            startAsyncDataTask();
         }
     }
 
-    public void StartAsyncDataTask() {
+    public void startAsyncDataTask() {
 
-        GetRetrofitDataAsyncTask task = new GetRetrofitDataAsyncTask(this);
+        getRetrofitDataAsyncTask task = new getRetrofitDataAsyncTask(this);
         task.execute(10);
     }
 
-    private static class GetRetrofitDataAsyncTask extends AsyncTask<Integer, Void, ArrayList> {
+    private static class getRetrofitDataAsyncTask extends AsyncTask<Integer, Void, ArrayList> {
         private WeakReference<HomeFragment> fragmentWeakReference;
 
-        GetRetrofitDataAsyncTask(HomeFragment homeFragment) {
+        getRetrofitDataAsyncTask(HomeFragment homeFragment) {
             fragmentWeakReference = new WeakReference<HomeFragment>(homeFragment);
         }
 
@@ -161,8 +161,8 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 + "\n========================================================================================================================");
 
                         homeFragment.list.add(new PostModel(PostModel.IMAGE_TYPE, mId, mTitle, mSubtitle, mContent));
-                        homeFragment.GetRetrofitImage(mediaUrl);
-                        homeFragment.SaveDataList();
+                        homeFragment.getRetrofitImage(mediaUrl);
+                        homeFragment.saveDataList();
                     }
                     homeFragment.adapter.notifyDataSetChanged();
                 }
@@ -198,7 +198,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
-    private void GetRetrofitImage(String mediaUrl) {
+    private void getRetrofitImage(String mediaUrl) {
         Retrofit retrofit2 = new Retrofit.Builder()
                 .baseUrl(getResources().getString(R.string.base_url))
                 .addConverterFactory(GsonConverterFactory.create())
@@ -219,13 +219,13 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                               if (response.body().size() != 0) {
                                   String mediaUrl = response.body().get(0).getLink();
                                   mediaList.add(new PostMedia(mediaUrl));
-                                  SaveDataImageList();
+                                  saveDataImageList();
                                   Log.d(TAG, "onResponseImage: " + "\n******************************" + "\n\t" + mediaUrl + "\n******************************");
                               } else {
 
                                   String mediaUrl = null;
                                   mediaList.add(new PostMedia(mediaUrl));
-                                  SaveDataImageList();
+                                  saveDataImageList();
                                   Log.d(TAG, "onResponseImage: " + "\n******************************" + "\n\t" + mediaUrl + "\n******************************");
                               }
                               adapter.notifyDataSetChanged();
@@ -238,7 +238,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         );
     }
 
-    private void SaveDataList() {
+    private void saveDataList() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("SHARED_PREFERENCES", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -249,7 +249,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         editor.apply();
     }
 
-    private void SaveDataImageList() {
+    public void saveDataImageList() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("SHARED_PREFERENCES", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
