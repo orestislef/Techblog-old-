@@ -84,7 +84,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             ((ImageTypeViewHolder) viewHolder).imageView.setVisibility(View.VISIBLE);
             Glide.with(mContext)
                     .load(postMediaUrl)
-                    .thumbnail()
                     .into(((ImageTypeViewHolder) viewHolder).imageView);
         }
 

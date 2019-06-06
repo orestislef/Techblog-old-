@@ -1,6 +1,7 @@
 package com.orestislef.techblog;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,15 +76,15 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             @Override
             public void run() {
                 // Stop animation (This will be after 1 seconds)
+                StartAsyncDataTask(category);
+//                list.clear();
+//                adapter.clearModel();
 
-                list.clear();
-                adapter.clearModel();
+//                mediaList.clear();
+//                adapter.clearPostMediaList();
 
-                mediaList.clear();
-                adapter.clearPostMediaList();
-
-                getRetrofitData();
-                swipeContainer.setRefreshing(false);
+//                getRetrofitData();
+//                swipeContainer.setRefreshing(false);
             }
         }, 1000); // Delay in millis
     }
@@ -108,63 +110,102 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
             mediaList = new ArrayList<PostMedia>();
         }
         if (json == null || json2 == null) {
-            getRetrofitData();
+            StartAsyncDataTask(category);
         }
     }
 
-    private void getRetrofitData() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getResources().getString(R.string.base_url))
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        RetrofitArrayApi service = retrofit.create(RetrofitArrayApi.class);
-        Call<List<WPPost>> call = service.getPostByCategory(category);
-
-        call.enqueue(new Callback<List<WPPost>>() {
-            @Override
-            public void onResponse(Call<List<WPPost>> call, Response<List<WPPost>> response) {
-                Log.e(TAG, "onResponse: " + response.body());
-
-                adapter.clearModel();
-
-                for (int i = 0; i < response.body().size(); i++) {
-                    int mId = response.body().get(i).getId();
-                    Log.d(TAG, "onResponseID: " + mId);
-                    String mediaUrl = response.body().get(i).getLinks().getWpAttachment().get(0).getHref();
-                    String mTitle = response.body().get(i).getTitle().getRendered();
-                    String mSubtitle = response.body().get(i).getExcerpt().getRendered();
-
-                    mSubtitle = mSubtitle.replace("<p>", "");
-                    mSubtitle = mSubtitle.replace("</p>", "");
-                    mSubtitle = mSubtitle.replace("[&hellip;]", "");
-
-                    String mContent = response.body().get(i).getContent().getRendered();
-
-
-                    Log.d(TAG, "onResponse: " +
-                            "\n========================================================================================================================"
-                            + "\nid: \t\t" + mId
-                            + "\nTitle: \t\t" + mTitle
-                            + "\nSubtitle: \t" + mSubtitle
-                            + "\nContent: \t\t" + mContent
-                            + "\n========================================================================================================================");
-
-                    list.add(new PostModel(PostModel.IMAGE_TYPE, mId, mTitle, mSubtitle, mContent));
-                    getRetrofitImage(mediaUrl);
-                    saveDataList();
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<List<WPPost>> call, Throwable t) {
-
-            }
-        });
+    private void StartAsyncDataTask(Integer category) {
+        GetRetrofitDataAsyncTask task = new GetRetrofitDataAsyncTask(this);
+        task.execute(category);
     }
 
-    private void getRetrofitImage(final String mediaUrl) {
+    private static class GetRetrofitDataAsyncTask extends AsyncTask<Integer, Void, ArrayList> {
+        private WeakReference<PostListFragment> fragmentWeakReference;
+
+        GetRetrofitDataAsyncTask(PostListFragment postListFragment) {
+            fragmentWeakReference = new WeakReference<PostListFragment>(postListFragment);
+        }
+
+        @Override
+        protected ArrayList doInBackground(Integer... integers) {
+
+            final PostListFragment postListFragment = fragmentWeakReference.get();
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(postListFragment.getResources().getString(R.string.base_url))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            RetrofitArrayApi service = retrofit.create(RetrofitArrayApi.class);
+//        Call<List<WPPost>> call = service.getPostInfo();
+            Call<List<WPPost>> call = service.getPostByCategory(integers[0]);
+
+            call.enqueue(new Callback<List<WPPost>>() {
+                @Override
+                public void onResponse(Call<List<WPPost>> call, Response<List<WPPost>> response) {
+                    Log.e(TAG, "onResponse: " + response.body());
+
+                    postListFragment.adapter.clearModel();
+
+                    for (int i = 0; i < response.body().size(); i++) {
+                        int mId = response.body().get(i).getId();
+                        Log.d(TAG, "onResponseID: " + mId);
+                        String mediaUrl = response.body().get(i).getLinks().getWpAttachment().get(0).getHref();
+                        String mTitle = response.body().get(i).getTitle().getRendered();
+                        String mSubtitle = response.body().get(i).getExcerpt().getRendered();
+
+                        mSubtitle = mSubtitle.replace("<p>", "");
+                        mSubtitle = mSubtitle.replace("</p>", "");
+                        mSubtitle = mSubtitle.replace("[&hellip;]", "");
+
+                        String mContent = response.body().get(i).getContent().getRendered();
+
+                        Log.d(TAG, "onResponse: "
+                                + "\n========================================================================================================================"
+                                + "\nid: \t\t" + mId
+                                + "\nTitle: \t\t" + mTitle
+                                + "\nSubtitle: \t" + mSubtitle
+                                + "\nContent: \t\t" + mContent
+                                + "\n========================================================================================================================");
+
+                        postListFragment.list.add(new PostModel(PostModel.IMAGE_TYPE, mId, mTitle, mSubtitle, mContent));
+                        postListFragment.GetRetrofitImage(mediaUrl);
+                        postListFragment.SaveDataList();
+                    }
+                    postListFragment.adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFailure(Call<List<WPPost>> call, Throwable t) {
+
+                }
+            });
+            return postListFragment.list;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            PostListFragment postListFragment = fragmentWeakReference.get();
+            if (postListFragment == null || postListFragment.isDetached()) {
+                return;
+            }
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList arrayList) {
+
+            PostListFragment homeFragment = fragmentWeakReference.get();
+            if (homeFragment == null || homeFragment.isDetached()) {
+                return;
+            }
+            homeFragment.swipeContainer.setRefreshing(false);
+
+            super.onPostExecute(arrayList);
+        }
+    }
+
+    private void GetRetrofitImage(final String mediaUrl) {
 
         Retrofit retrofit2 = new Retrofit.Builder()
                 .baseUrl(getResources().getString(R.string.base_url))
@@ -191,7 +232,6 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                                   Log.d(TAG, "onResponseImage: " + "\n******************************" + "\n\t" + mediaUrl + "\n******************************");
                               } else {
                                   String mediaUrl = null;
-//                                  String mediaUrl = "https://i2.wp.com/frankmedilink.in/wp-content/uploads/2017/02/no-preview-big1.jpg";
                                   mediaList.add(new PostMedia(mediaUrl));
                                   saveDataImageList();
                                   Log.d(TAG, "onResponseImage: " + "\n******************************" + "\n\t" + mediaUrl + "\n******************************");
@@ -206,7 +246,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
         );
     }
 
-    private void saveDataList() {
+    private void SaveDataList() {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(category + "SHARED_PREFERENCES", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 

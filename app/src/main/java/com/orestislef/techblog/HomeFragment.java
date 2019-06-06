@@ -111,7 +111,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         task.execute(10);
     }
 
-    private final class GetRetrofitDataAsyncTask extends AsyncTask<Integer, Void, ArrayList> {
+    private static class GetRetrofitDataAsyncTask extends AsyncTask<Integer, Void, ArrayList> {
         private WeakReference<HomeFragment> fragmentWeakReference;
 
         GetRetrofitDataAsyncTask(HomeFragment homeFragment) {
@@ -120,8 +120,11 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         @Override
         protected ArrayList doInBackground(Integer... integers) {
+
+            final HomeFragment homeFragment = fragmentWeakReference.get();
+
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(getResources().getString(R.string.base_url))
+                    .baseUrl(homeFragment.getResources().getString(R.string.base_url))
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -134,7 +137,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 public void onResponse(Call<List<WPPost>> call, Response<List<WPPost>> response) {
                     Log.e(TAG, "onResponse: " + response.body());
 
-                    adapter.clearModel();
+                    homeFragment.adapter.clearModel();
 
                     for (int i = 0; i < response.body().size(); i++) {
                         int mId = response.body().get(i).getId();
@@ -157,11 +160,11 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                                 + "\nContent: \t\t" + mContent
                                 + "\n========================================================================================================================");
 
-                        list.add(new PostModel(PostModel.IMAGE_TYPE, mId, mTitle, mSubtitle, mContent));
-                        GetRetrofitImage(mediaUrl);
-                        SaveDataList();
+                        homeFragment.list.add(new PostModel(PostModel.IMAGE_TYPE, mId, mTitle, mSubtitle, mContent));
+                        homeFragment.GetRetrofitImage(mediaUrl);
+                        homeFragment.SaveDataList();
                     }
-                    adapter.notifyDataSetChanged();
+                    homeFragment.adapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -169,16 +172,17 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
                 }
             });
-            return list;
+            return homeFragment.list;
         }
 
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
+
             HomeFragment homeFragment = fragmentWeakReference.get();
             if (homeFragment == null || homeFragment.isDetached()) {
                 return;
             }
-            super.onPreExecute();
         }
 
         @Override
