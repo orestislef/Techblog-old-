@@ -26,29 +26,32 @@
         android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/facebook_logo"
+        <ImageButton
+            android:id="@+id/facebook_bt"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:background="@drawable/ic_facebook"/>
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/instagram_bt"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="8dp"
-            android:src="@drawable/ic_instagram"/>
+            android:background="@drawable/ic_instagram"/>
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/youtube_bt"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="8dp"
-            android:src="@drawable/ic_youtube"/>
+            android:background="@drawable/ic_youtube"/>
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/twitter_bt"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="8dp"
-            android:src="@drawable/ic_twitter"/>
+            android:background="@drawable/ic_twitter"/>
 
     </LinearLayout>
 

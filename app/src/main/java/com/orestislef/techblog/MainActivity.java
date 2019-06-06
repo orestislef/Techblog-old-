@@ -8,9 +8,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
 //*****************************************************************************
 //  1.      na valw na pernei perisetera otan ftanei katw to recyclerViewer
@@ -33,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private ActionBarDrawerToggle toggle;
 
+    private ImageButton facebookBT, instagramBT, youtubeBT,twitterBt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +52,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+//        facebookBT = findViewById(R.id.facebook_bt);
+//        instagramBT = findViewById(R.id.instagram_bt);
+//        youtubeBT = findViewById(R.id.youtube_bt);
+//        twitterBt = findViewById(R.id.twitter_bt);
 
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -161,5 +172,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else
             super.onBackPressed();
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        Toast.makeText(this, "hello facebook", Toast.LENGTH_SHORT).show();
     }
 }
