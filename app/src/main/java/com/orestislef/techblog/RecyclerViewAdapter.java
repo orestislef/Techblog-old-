@@ -70,8 +70,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
         super.onBindViewHolder(holder, position, payloads);
 
-        final PostModel object = dataset.get(position);
-        final PostMedia object2 = postMedia.get(position);
+         final PostModel object = dataset.get(position);
+         PostMedia object2 = postMedia.get(position);
 
         String postMediaUrl = object2.PostMediaUrl;
 
@@ -83,7 +83,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
                     .load(postMediaUrl)
                     .into(((ImageTypeViewHolder) holder).imageView);
         }
-
 
         ((ImageTypeViewHolder) holder).title.setText(object.title);
         ((ImageTypeViewHolder) holder).excerpt.setText(object.excerpt);

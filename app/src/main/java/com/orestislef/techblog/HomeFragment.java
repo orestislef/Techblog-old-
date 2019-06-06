@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -40,6 +42,9 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private ArrayList<PostMedia> mediaList;
     private RecyclerViewAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
+    private boolean isScrolling=false;
+    private int currentItems, totalItems, scrollOutItems;
+    private Parcelable recyclerViewState;
 
     private int postsPerPage = 10;
 
@@ -59,6 +64,31 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         swipeContainer = view.findViewById(R.id.swipe_container);
         swipeContainer.setOnRefreshListener(this);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = mLayoutManager.getChildCount();
+                totalItems = mLayoutManager.getItemCount();
+                scrollOutItems = mLayoutManager.findFirstVisibleItemPosition();
+                if (isScrolling && (currentItems + scrollOutItems == totalItems)){
+                    //fetch data
+                    isScrolling = false;
+                    postsPerPage = postsPerPage+10;
+                    startAsyncDataTask(postsPerPage);
+                    recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+                }
+            }
+        });
 
         return view;
     }
@@ -112,9 +142,15 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
-    private void startAsyncDataTask(Integer postsPerPage) {
-        getRetrofitDataAsyncTask task = new getRetrofitDataAsyncTask(this);
-        task.execute(postsPerPage);
+    private void startAsyncDataTask(final Integer postsPerPage) {
+        final getRetrofitDataAsyncTask task = new getRetrofitDataAsyncTask(this);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                task.execute(postsPerPage);
+            }
+        },3000);
+        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
     }
 
     private static class getRetrofitDataAsyncTask extends AsyncTask<Integer, Void, ArrayList> {
