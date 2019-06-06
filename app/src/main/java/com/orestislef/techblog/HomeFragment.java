@@ -42,9 +42,9 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private ArrayList<PostMedia> mediaList;
     private RecyclerViewAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
-    private boolean isScrolling=false;
+    private boolean isScrolling = false;
     private int currentItems, totalItems, scrollOutItems;
-    private Parcelable recyclerViewState;
+    public Parcelable recyclerViewState;
 
     private int postsPerPage = 10;
 
@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     isScrolling = true;
                 }
             }
@@ -80,13 +80,13 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 currentItems = mLayoutManager.getChildCount();
                 totalItems = mLayoutManager.getItemCount();
                 scrollOutItems = mLayoutManager.findFirstVisibleItemPosition();
-                if (isScrolling && (currentItems + scrollOutItems == totalItems)){
-                    //fetch data
+                if (isScrolling && (currentItems + scrollOutItems == totalItems)) {
                     isScrolling = false;
-                    postsPerPage = postsPerPage+10;
+                    postsPerPage = postsPerPage + 10;
                     startAsyncDataTask(postsPerPage);
-                    recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+
                 }
+                recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
             }
         });
 
@@ -144,13 +144,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private void startAsyncDataTask(final Integer postsPerPage) {
         final getRetrofitDataAsyncTask task = new getRetrofitDataAsyncTask(this);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                task.execute(postsPerPage);
-            }
-        },3000);
-        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+        task.execute(postsPerPage);
     }
 
     private static class getRetrofitDataAsyncTask extends AsyncTask<Integer, Void, ArrayList> {
@@ -236,6 +230,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
             super.onPostExecute(arrayList);
         }
+
     }
 
     private void getRetrofitImage(final String mediaUrl) {
@@ -249,17 +244,17 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         adapter.clearPostMediaList();
 
-        Call<List<WPMediaId>> call2 = service2.getWpAttachment(mediaUrl);
+        Call<List<WPPostID>> call2 = service2.getWpAttachment(mediaUrl);
         Log.d(TAG, "getRetrofitImageMediaUrl: " + mediaUrl);
-        call2.enqueue(new Callback<List<WPMediaId>>() {
+        call2.enqueue(new Callback<List<WPPostID>>() {
                           @Override
-                          public void onResponse(Call<List<WPMediaId>> call, Response<List<WPMediaId>> response) {
+                          public void onResponse(Call<List<WPPostID>> call, Response<List<WPPostID>> response) {
 
                               Log.e(TAG, "onResponse: " + response.body());
                               Log.d(TAG, "onResponse: mediaUrl: " + mediaUrl);
 
                               if (response.body().size() != 0) {
-                                  String mediaUrl = response.body().get(0).getLink();
+                                  String mediaUrl = response.body().get(0).getMediaDetails().getSizes().getThumbnail().getSourceUrl();
                                   mediaList.add(new PostMedia(mediaUrl));
                                   saveDataImageList();
                                   Log.d(TAG, "onResponseImage: " + "\n******************************" + "\n\t" + mediaUrl + "\n******************************");
@@ -273,7 +268,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                           }
 
                           @Override
-                          public void onFailure(Call<List<WPMediaId>> call, Throwable t) {
+                          public void onFailure(Call<List<WPPostID>> call, Throwable t) {
                           }
                       }
         );

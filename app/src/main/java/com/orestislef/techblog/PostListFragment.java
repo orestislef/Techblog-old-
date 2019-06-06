@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -40,7 +42,11 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
     private ArrayList<PostMedia> mediaList;
     private RecyclerViewAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
+    private boolean isScrolling = false;
+    private int currentItems, totalItems, scrollOutItems;
+    public Parcelable recyclerViewState;
 
+    private int postsPerPage = 10;
     private int category;
 
     @Nullable
@@ -61,6 +67,32 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         swipeContainer = view.findViewById(R.id.swipe_container);
         swipeContainer.setOnRefreshListener(this);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = mLayoutManager.getChildCount();
+                totalItems = mLayoutManager.getItemCount();
+                scrollOutItems = mLayoutManager.findFirstVisibleItemPosition();
+                if (isScrolling && (currentItems + scrollOutItems == totalItems)) {
+                    isScrolling = false;
+                    postsPerPage = postsPerPage + 10;
+                    startAsyncDataTask(postsPerPage);
+
+                }
+                recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+            }
+        });
+
 
         return view;
     }
@@ -216,11 +248,11 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         adapter.clearPostMediaList();
 
-        Call<List<WPMediaId>> call2 = service2.getWpAttachment(mediaUrl);
+        Call<List<WPPostID>> call2 = service2.getWpAttachment(mediaUrl);
         Log.d(TAG, "getRetrofitImageMediaUrl: " + mediaUrl);
-        call2.enqueue(new Callback<List<WPMediaId>>() {
+        call2.enqueue(new Callback<List<WPPostID>>() {
                           @Override
-                          public void onResponse(Call<List<WPMediaId>> call, Response<List<WPMediaId>> response) {
+                          public void onResponse(Call<List<WPPostID>> call, Response<List<WPPostID>> response) {
 
                               Log.e(TAG, "onResponse: " + response.body());
                               Log.d(TAG, "onResponse: mediaUrl: " + mediaUrl);
@@ -240,7 +272,7 @@ public class PostListFragment extends Fragment implements SwipeRefreshLayout.OnR
                           }
 
                           @Override
-                          public void onFailure(Call<List<WPMediaId>> call, Throwable t) {
+                          public void onFailure(Call<List<WPPostID>> call, Throwable t) {
                           }
                       }
         );

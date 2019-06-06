@@ -25,5 +25,5 @@ public interface RetrofitArrayApi {
     Call<List<WPMediaId>> getMediaById(@Query("parent") int mediaId);
 
     @GET
-    Call<List<WPMediaId>> getWpAttachment(@Url String url);
+    Call<List<WPPostID>> getWpAttachment(@Url String url);
 }

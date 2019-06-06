@@ -39,45 +39,45 @@ class WPMediaId {
     @SerializedName("title")
     @Expose
     private Title title;
-    @SerializedName("content")
-    @Expose
-    private Content content;
-    @SerializedName("excerpt")
-    @Expose
-    private Excerpt excerpt;
     @SerializedName("author")
     @Expose
     private Integer author;
-    @SerializedName("featured_media")
-    @Expose
-    private Integer featuredMedia;
     @SerializedName("comment_status")
     @Expose
     private String commentStatus;
     @SerializedName("ping_status")
     @Expose
     private String pingStatus;
-    @SerializedName("sticky")
-    @Expose
-    private Boolean sticky;
     @SerializedName("template")
     @Expose
     private String template;
-    @SerializedName("format")
-    @Expose
-    private String format;
     @SerializedName("meta")
     @Expose
     private List<Object> meta = null;
-    @SerializedName("categories")
+    @SerializedName("description")
     @Expose
-    private List<Integer> categories = null;
-    @SerializedName("tags")
+    private Description description;
+    @SerializedName("caption")
     @Expose
-    private List<Integer> tags = null;
-    @SerializedName("yst_prominent_words")
+    private Caption caption;
+    @SerializedName("alt_text")
     @Expose
-    private List<Object> ystProminentWords = null;
+    private String altText;
+    @SerializedName("media_type")
+    @Expose
+    private String mediaType;
+    @SerializedName("mime_type")
+    @Expose
+    private String mimeType;
+    @SerializedName("media_details")
+    @Expose
+    private MediaDetails mediaDetails;
+    @SerializedName("post")
+    @Expose
+    private Integer post;
+    @SerializedName("source_url")
+    @Expose
+    private String sourceUrl;
     @SerializedName("_links")
     @Expose
     private Links links;
@@ -170,36 +170,12 @@ class WPMediaId {
         this.title = title;
     }
 
-    public Content getContent() {
-        return content;
-    }
-
-    public void setContent(Content content) {
-        this.content = content;
-    }
-
-    public Excerpt getExcerpt() {
-        return excerpt;
-    }
-
-    public void setExcerpt(Excerpt excerpt) {
-        this.excerpt = excerpt;
-    }
-
     public Integer getAuthor() {
         return author;
     }
 
     public void setAuthor(Integer author) {
         this.author = author;
-    }
-
-    public Integer getFeaturedMedia() {
-        return featuredMedia;
-    }
-
-    public void setFeaturedMedia(Integer featuredMedia) {
-        this.featuredMedia = featuredMedia;
     }
 
     public String getCommentStatus() {
@@ -218,28 +194,12 @@ class WPMediaId {
         this.pingStatus = pingStatus;
     }
 
-    public Boolean getSticky() {
-        return sticky;
-    }
-
-    public void setSticky(Boolean sticky) {
-        this.sticky = sticky;
-    }
-
     public String getTemplate() {
         return template;
     }
 
     public void setTemplate(String template) {
         this.template = template;
-    }
-
-    public String getFormat() {
-        return format;
-    }
-
-    public void setFormat(String format) {
-        this.format = format;
     }
 
     public List<Object> getMeta() {
@@ -250,28 +210,68 @@ class WPMediaId {
         this.meta = meta;
     }
 
-    public List<Integer> getCategories() {
-        return categories;
+    public Description getDescription() {
+        return description;
     }
 
-    public void setCategories(List<Integer> categories) {
-        this.categories = categories;
+    public void setDescription(Description description) {
+        this.description = description;
     }
 
-    public List<Integer> getTags() {
-        return tags;
+    public Caption getCaption() {
+        return caption;
     }
 
-    public void setTags(List<Integer> tags) {
-        this.tags = tags;
+    public void setCaption(Caption caption) {
+        this.caption = caption;
     }
 
-    public List<Object> getYstProminentWords() {
-        return ystProminentWords;
+    public String getAltText() {
+        return altText;
     }
 
-    public void setYstProminentWords(List<Object> ystProminentWords) {
-        this.ystProminentWords = ystProminentWords;
+    public void setAltText(String altText) {
+        this.altText = altText;
+    }
+
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
+    public MediaDetails getMediaDetails() {
+        return mediaDetails;
+    }
+
+    public void setMediaDetails(MediaDetails mediaDetails) {
+        this.mediaDetails = mediaDetails;
+    }
+
+    public Integer getPost() {
+        return post;
+    }
+
+    public void setPost(Integer post) {
+        this.post = post;
+    }
+
+    public String getSourceUrl() {
+        return sourceUrl;
+    }
+
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
     }
 
     public Links getLinks() {
