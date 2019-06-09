@@ -18,25 +18,25 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<PostModel> dataset;
-    private ArrayList<PostMedia> postMedia;
+    private ArrayList<PostModel> postDataset;
+    private ArrayList<PostMedia> imageDataset;
     private Context mContext;
 
     public void clearModel() {
-        int sizeDa = dataset.size();
-        dataset.clear();
+        int sizeDa = postDataset.size();
+        postDataset.clear();
         notifyItemRangeRemoved(0, sizeDa);
     }
 
     public void clearPostMediaList() {
-        int sizeIm = postMedia.size();
-        postMedia.clear();
+        int sizeIm = imageDataset.size();
+        imageDataset.clear();
         notifyItemRangeRemoved(0, sizeIm);
     }
 
-    public void addAll(ArrayList<PostModel> list, ArrayList<PostMedia> mediaList) {
-        dataset.addAll(list);
-        mediaList.addAll(mediaList);
+    public void addAll(ArrayList<PostModel> list, ArrayList<PostMedia> imageList) {
+        postDataset.addAll(list);
+        imageDataset.addAll(imageList);
     }
 
     public static class ImageTypeViewHolder extends RecyclerView.ViewHolder {
@@ -53,9 +53,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public RecyclerViewAdapter(ArrayList<PostModel> mlist, ArrayList<PostMedia> mPostMedia, Context context) {
-        this.dataset = mlist;
-        this.postMedia = mPostMedia;
+    public RecyclerViewAdapter(ArrayList<PostModel> mlist, ArrayList<PostMedia> mMediaList, Context context) {
+        this.postDataset = mlist;
+        this.imageDataset = mMediaList;
         this.mContext = context;
     }
 
@@ -70,12 +70,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
         super.onBindViewHolder(holder, position, payloads);
 
-         final PostModel object = dataset.get(position);
-         PostMedia object2 = postMedia.get(position);
+         final PostModel object = postDataset.get(position);
+         final PostMedia object2 = imageDataset.get(position);
 
         String postMediaUrl = object2.PostMediaUrl;
 
-        if (postMediaUrl == null) {
+        if (postMediaUrl == "NOIMAGE") {
             ((ImageTypeViewHolder) holder).imageView.setVisibility(View.GONE);
         } else {
             ((ImageTypeViewHolder) holder).imageView.setVisibility(View.VISIBLE);
@@ -124,6 +124,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return postMedia.size();
+        return imageDataset.size();
     }
 }
