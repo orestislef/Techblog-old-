@@ -17,7 +17,7 @@ The primary goal of this project is to explore and demonstrate the interaction b
 
 To get started with the Techblog project, follow these steps:
 
-1. **Clone the Repository**: Clone this repository to your local machine using `git clone https://github.com/your-username/techblog.git`.
+1. **Clone the Repository**: Clone this repository to your local machine using `git clone https://github.com/orestislef/Techblog-old-.git`.
 
 2. **Setup WordPress Backend**: Ensure you have a WordPress installation set up as the backend for this project. Make sure the WordPress REST API is enabled and accessible.
 
